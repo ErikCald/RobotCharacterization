@@ -132,65 +132,7 @@ public class Robot extends TimedRobot {
 
         break;
       case LEFT:
-        motor.setSensorPhase(true);
-        
-        leftEncoderPosition = ()
-          -> motor.getSelectedSensorPosition(PIDIDX) * encoderConstant;
-        leftEncoderRate = ()
-          -> motor.getSelectedSensorVelocity(PIDIDX) * encoderConstant *
-               10;
-        
-
-        break;
-      default:
-        // probably do nothing
-        break;
-
-      }
-    
-    }
-    
-
-    return motor;
-
-  }
-  public WPI_VictorSPX setupWPI_VictorSPX(int port, Sides side, boolean inverted) {
-    // create new motor and set neutral modes (if needed)
-    WPI_VictorSPX motor = new WPI_VictorSPX(port);
-    // setup talon
-    motor.configFactoryDefault();
-    motor.setNeutralMode(NeutralMode.Brake);
-    motor.setInverted(inverted);
-    
-    // setup encoder if motor isn't a follower
-    if (side != Sides.FOLLOWER) {
-    
-      
-      motor.configSelectedFeedbackSensor(
-            FeedbackDevice.QuadEncoder,
-            PIDIDX, 10
-      );    
-
-
-
-    switch (side) {
-      // setup encoder and data collecting methods
-
-      case RIGHT:
-        // set right side methods = encoder methods
-
-          
         motor.setSensorPhase(false);
-        rightEncoderPosition = ()
-          -> motor.getSelectedSensorPosition(PIDIDX) * encoderConstant;
-        rightEncoderRate = ()
-          -> motor.getSelectedSensorVelocity(PIDIDX) * encoderConstant *
-               10;
-
-
-        break;
-      case LEFT:
-        motor.setSensorPhase(true);
         
         leftEncoderPosition = ()
           -> motor.getSelectedSensorPosition(PIDIDX) * encoderConstant;
@@ -220,14 +162,10 @@ public class Robot extends TimedRobot {
     stick = new Joystick(0);
     
     // create left motor
-    WPI_TalonSRX leftMotor = setupWPI_TalonSRX(1, Sides.LEFT, false);
+    WPI_TalonSRX leftMotor = setupWPI_TalonSRX(2, Sides.LEFT, false);
 
-    WPI_VictorSPX leftFollowerID3 = setupWPI_VictorSPX(3, Sides.FOLLOWER, false);
-    leftFollowerID3.follow(leftMotor);
 
-    WPI_TalonSRX rightMotor = setupWPI_TalonSRX(2, Sides.RIGHT, false);
-    WPI_VictorSPX rightFollowerID4 = setupWPI_VictorSPX(4, Sides.FOLLOWER, false);    
-    rightFollowerID4.follow(rightMotor);
+    WPI_TalonSRX rightMotor = setupWPI_TalonSRX(1, Sides.RIGHT, false);
     drive = new DifferentialDrive(leftMotor, rightMotor);
     drive.setDeadband(0);
 
@@ -238,7 +176,7 @@ public class Robot extends TimedRobot {
     // Note that the angle from the NavX and all implementors of WPILib Gyro
     // must be negated because getAngle returns a clockwise positive angle
     // Uncomment for Pigeon
-    PigeonIMU pigeon = new PigeonIMU(new WPI_TalonSRX(10));
+    PigeonIMU pigeon = new PigeonIMU(27);
     gyroAngleRadians = () -> {
       // Allocating a new array every loop is bad but concise
       double[] xyz = new double[3];
